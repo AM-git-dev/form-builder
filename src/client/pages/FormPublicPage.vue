@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router';
+import PublicLayout from '../components/layouts/PublicLayout.vue';
+import FormRenderer from '../components/renderer/FormRenderer.vue';
+
+const route = useRoute();
+const formId = route.params.id as string;
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-white">
-    <div class="w-full max-w-2xl p-8">
-      <h1 class="text-2xl font-bold text-gray-900 mb-6">Formulaire</h1>
-      <p class="text-gray-500">Page publique du formulaire (Sprint 5)</p>
-    </div>
-  </div>
+  <PublicLayout>
+    <FormRenderer :form-id="formId" />
+  </PublicLayout>
 </template>
