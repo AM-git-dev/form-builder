@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as formsController from '../controllers/forms.controller.js';
+import * as submissionsController from '../controllers/submissions.controller.js';
 import { validate } from '../middleware/validate.middleware.js';
 import { authenticate } from '../middleware/auth.middleware.js';
 import {
@@ -16,6 +17,10 @@ import {
   reorderFieldsSchema,
   fieldParamsSchema,
 } from '../schemas/forms.schema.js';
+import {
+  createSubmissionSchema,
+  createEventSchema,
+} from '../schemas/submissions.schema.js';
 
 const router = Router();
 
@@ -141,6 +146,36 @@ router.patch(
   authenticate,
   validate({ params: stepParamsSchema, body: reorderFieldsSchema }),
   formsController.reorderFields,
+);
+
+// ===========================
+// SUBMISSIONS (public + auth)
+// ===========================
+
+// Public - soumission de formulaire (pas d'auth)
+router.post(
+  '/:id/submissions',
+  validate({ params: formIdParamSchema, body: createSubmissionSchema }),
+  submissionsController.createSubmission,
+);
+
+// Auth - liste des soumissions (owner)
+router.get(
+  '/:id/submissions',
+  authenticate,
+  validate({ params: formIdParamSchema, query: paginationQuerySchema }),
+  submissionsController.listSubmissions,
+);
+
+// ===========================
+// EVENTS (public)
+// ===========================
+
+// Public - tracking d'evenement (pas d'auth)
+router.post(
+  '/:id/events',
+  validate({ params: formIdParamSchema, body: createEventSchema }),
+  submissionsController.createEvent,
 );
 
 export default router;
