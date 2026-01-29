@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+coverage/
+test-results/
+playwright-report/
+
+# Claude Code config (ne pas commiter les fichiers markdown)
+.claude/**/*.md
+CLAUDE.md
+project-init-wizard.md
