@@ -75,6 +75,9 @@
     "vue-eslint-parser": "^9.0.0",
     "@vue/test-utils": "^2.4.0"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "pnpm": {
     "onlyBuiltDependencies": [
       "@prisma/client",
