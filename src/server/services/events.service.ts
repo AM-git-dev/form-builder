@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { NotFoundError } from '../utils/errors.js';
 import type { CreateEventInput } from '../schemas/submissions.schema.js';
@@ -37,7 +38,7 @@ export async function createEvent(
       type: input.type,
       sessionId: input.sessionId,
       stepOrder,
-      metadata: input.metadata ?? null,
+      metadata: input.metadata ? (input.metadata as Prisma.InputJsonValue) : Prisma.DbNull,
     },
     select: {
       id: true,

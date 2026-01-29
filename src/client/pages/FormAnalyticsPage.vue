@@ -114,7 +114,7 @@ onMounted(fetchAnalytics);
       <div v-else-if="overview" class="space-y-6">
         <StatsOverview :overview="overview" />
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <FunnelChart :steps="funnel" />
+          <FunnelChart :steps="funnel" :total-starts="overview?.totalStarts ?? 0" />
           <TimelineChart :data="timeline" />
         </div>
       </div>

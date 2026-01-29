@@ -25,9 +25,10 @@ export async function listForms(req: Request, res: Response, next: NextFunction)
 export async function getFormById(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const form = await formsService.getFormById(req.params.id);
+    const form = await formsService.getFormById(formId);
 
     res.json(formatResponse(form));
   } catch (error) {
@@ -42,7 +43,8 @@ export async function getFormSchema(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const schema = await formsService.getFormSchema(req.params.id);
+    const formId = req.params.id as string;
+    const schema = await formsService.getFormSchema(formId);
 
     res.json(formatResponse(schema));
   } catch (error) {
@@ -66,9 +68,10 @@ export async function createForm(req: Request, res: Response, next: NextFunction
 export async function updateForm(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const form = await formsService.updateForm(req.params.id, req.body);
+    const form = await formsService.updateForm(formId, req.body);
 
     res.json(formatResponse(form));
   } catch (error) {
@@ -80,9 +83,10 @@ export async function updateForm(req: Request, res: Response, next: NextFunction
 export async function deleteForm(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    await formsService.deleteForm(req.params.id);
+    await formsService.deleteForm(formId);
 
     res.status(204).send();
   } catch (error) {
@@ -94,9 +98,10 @@ export async function deleteForm(req: Request, res: Response, next: NextFunction
 export async function publishForm(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const form = await formsService.publishForm(req.params.id);
+    const form = await formsService.publishForm(formId);
 
     res.json(formatResponse(form));
   } catch (error) {
@@ -108,9 +113,10 @@ export async function publishForm(req: Request, res: Response, next: NextFunctio
 export async function archiveForm(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const form = await formsService.archiveForm(req.params.id);
+    const form = await formsService.archiveForm(formId);
 
     res.json(formatResponse(form));
   } catch (error) {
@@ -126,9 +132,10 @@ export async function archiveForm(req: Request, res: Response, next: NextFunctio
 export async function createStep(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const step = await formsService.createStep(req.params.id, req.body);
+    const step = await formsService.createStep(formId, req.body);
 
     res.status(201).json(formatResponse(step));
   } catch (error) {
@@ -140,9 +147,11 @@ export async function createStep(req: Request, res: Response, next: NextFunction
 export async function updateStep(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    const stepId = req.params.stepId as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const step = await formsService.updateStep(req.params.stepId, req.body);
+    const step = await formsService.updateStep(stepId, req.body);
 
     res.json(formatResponse(step));
   } catch (error) {
@@ -154,9 +163,11 @@ export async function updateStep(req: Request, res: Response, next: NextFunction
 export async function deleteStep(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    const stepId = req.params.stepId as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    await formsService.deleteStep(req.params.stepId);
+    await formsService.deleteStep(stepId);
 
     res.status(204).send();
   } catch (error) {
@@ -172,9 +183,10 @@ export async function reorderSteps(
 ): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const steps = await formsService.reorderSteps(req.params.id, req.body.stepIds);
+    const steps = await formsService.reorderSteps(formId, req.body.stepIds);
 
     res.json(formatResponse(steps));
   } catch (error) {
@@ -190,9 +202,11 @@ export async function reorderSteps(
 export async function createField(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    const stepId = req.params.stepId as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const field = await formsService.createField(req.params.stepId, req.body);
+    const field = await formsService.createField(stepId, req.body);
 
     res.status(201).json(formatResponse(field));
   } catch (error) {
@@ -204,9 +218,11 @@ export async function createField(req: Request, res: Response, next: NextFunctio
 export async function updateField(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    const fieldId = req.params.fieldId as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const field = await formsService.updateField(req.params.fieldId, req.body);
+    const field = await formsService.updateField(fieldId, req.body);
 
     res.json(formatResponse(field));
   } catch (error) {
@@ -218,9 +234,11 @@ export async function updateField(req: Request, res: Response, next: NextFunctio
 export async function deleteField(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    const fieldId = req.params.fieldId as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    await formsService.deleteField(req.params.fieldId);
+    await formsService.deleteField(fieldId);
 
     res.status(204).send();
   } catch (error) {
@@ -236,9 +254,11 @@ export async function reorderFields(
 ): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    const stepId = req.params.stepId as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const fields = await formsService.reorderFields(req.params.stepId, req.body.fieldIds);
+    const fields = await formsService.reorderFields(stepId, req.body.fieldIds);
 
     res.json(formatResponse(fields));
   } catch (error) {

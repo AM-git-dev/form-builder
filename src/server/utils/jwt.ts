@@ -10,13 +10,13 @@ interface TokenPayload {
 export function signAccessToken(payload: TokenPayload): string {
   return jwt.sign(payload, config.JWT_ACCESS_SECRET, {
     expiresIn: config.JWT_ACCESS_EXPIRATION,
-  });
+  } as jwt.SignOptions);
 }
 
 export function signRefreshToken(payload: TokenPayload): string {
   return jwt.sign(payload, config.JWT_REFRESH_SECRET, {
     expiresIn: config.JWT_REFRESH_EXPIRATION,
-  });
+  } as jwt.SignOptions);
 }
 
 export function verifyAccessToken(token: string): TokenPayload {

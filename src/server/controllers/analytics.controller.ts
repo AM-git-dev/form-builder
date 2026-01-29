@@ -11,9 +11,10 @@ export async function getFormOverview(
 ): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const overview = await analyticsService.getFormOverview(req.params.id);
+    const overview = await analyticsService.getFormOverview(formId);
     res.json(formatResponse(overview));
   } catch (error) {
     next(error);
@@ -28,9 +29,10 @@ export async function getFormFunnel(
 ): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const funnel = await analyticsService.getFormFunnel(req.params.id);
+    const funnel = await analyticsService.getFormFunnel(formId);
     res.json(formatResponse(funnel));
   } catch (error) {
     next(error);
@@ -45,9 +47,10 @@ export async function getFormTimeline(
 ): Promise<void> {
   try {
     const userId = req.user!.id;
-    await formsService.verifyFormOwnership(req.params.id, userId);
+    const formId = req.params.id as string;
+    await formsService.verifyFormOwnership(formId, userId);
 
-    const timeline = await analyticsService.getFormTimeline(req.params.id);
+    const timeline = await analyticsService.getFormTimeline(formId);
     res.json(formatResponse(timeline));
   } catch (error) {
     next(error);

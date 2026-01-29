@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { NotFoundError, ForbiddenError, ValidationError } from '../utils/errors.js';
 import type {
@@ -172,8 +173,8 @@ export async function createForm(userId: string, input: CreateFormInput): Promis
     data: {
       userId,
       title: input.title,
-      description: input.description ?? null,
-      settings: input.settings ?? {},
+      description: input.description ?? undefined,
+      settings: (input.settings ?? {}) as Prisma.InputJsonValue,
       steps: {
         create: {
           title: 'Etape 1',
@@ -196,7 +197,7 @@ export async function updateForm(formId: string, input: UpdateFormInput): Promis
     data: {
       ...(input.title !== undefined && { title: input.title }),
       ...(input.description !== undefined && { description: input.description }),
-      ...(input.settings !== undefined && { settings: input.settings }),
+      ...(input.settings !== undefined && { settings: input.settings as Prisma.InputJsonValue }),
     },
     select: FORM_DETAIL_SELECT,
   });
@@ -332,7 +333,7 @@ export async function createStep(formId: string, input: CreateStepInput): Promis
     data: {
       formId,
       title: input.title,
-      description: input.description ?? null,
+      description: input.description ?? undefined,
       order: nextOrder,
     },
     select: {
@@ -539,12 +540,12 @@ export async function createField(stepId: string, input: CreateFieldInput): Prom
       stepId,
       type: input.type,
       label: input.label,
-      placeholder: input.placeholder ?? null,
+      placeholder: input.placeholder ?? undefined,
       required: input.required,
       order: nextOrder,
-      options: input.options ?? null,
-      validation: input.validation ?? null,
-      config: input.config ?? null,
+      options: input.options ? (input.options as unknown as Prisma.InputJsonValue) : Prisma.DbNull,
+      validation: input.validation ? (input.validation as unknown as Prisma.InputJsonValue) : Prisma.DbNull,
+      config: input.config ? (input.config as unknown as Prisma.InputJsonValue) : Prisma.DbNull,
     },
     select: {
       id: true,
@@ -584,9 +585,9 @@ export async function updateField(fieldId: string, input: UpdateFieldInput): Pro
       ...(input.label !== undefined && { label: input.label }),
       ...(input.placeholder !== undefined && { placeholder: input.placeholder }),
       ...(input.required !== undefined && { required: input.required }),
-      ...(input.options !== undefined && { options: input.options }),
-      ...(input.validation !== undefined && { validation: input.validation }),
-      ...(input.config !== undefined && { config: input.config }),
+      ...(input.options !== undefined && { options: input.options === null ? Prisma.DbNull : (input.options as unknown as Prisma.InputJsonValue) }),
+      ...(input.validation !== undefined && { validation: input.validation === null ? Prisma.DbNull : (input.validation as unknown as Prisma.InputJsonValue) }),
+      ...(input.config !== undefined && { config: input.config === null ? Prisma.DbNull : (input.config as unknown as Prisma.InputJsonValue) }),
     },
     select: {
       id: true,

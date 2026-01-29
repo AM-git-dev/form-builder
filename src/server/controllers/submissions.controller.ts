@@ -10,7 +10,8 @@ export async function createSubmission(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const submission = await submissionsService.createSubmission(req.params.id, req.body);
+    const formId = req.params.id as string;
+    const submission = await submissionsService.createSubmission(formId, req.body);
     res.status(201).json(formatResponse(submission));
   } catch (error) {
     next(error);
@@ -24,11 +25,12 @@ export async function listSubmissions(
   next: NextFunction,
 ): Promise<void> {
   try {
+    const formId = req.params.id as string;
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 20;
 
     const { submissions, total } = await submissionsService.listSubmissions(
-      req.params.id,
+      formId,
       page,
       limit,
     );
@@ -46,7 +48,8 @@ export async function createEvent(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const event = await eventsService.createEvent(req.params.id, req.body);
+    const formId = req.params.id as string;
+    const event = await eventsService.createEvent(formId, req.body);
     res.status(201).json(formatResponse(event));
   } catch (error) {
     next(error);
